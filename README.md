@@ -6,20 +6,27 @@
 |Reyhan Adi Satrio|5027251080|
 |Dafa Ridho Zhafif|5027251129|
 
-#### DHCP
-DHCP Starvation adalah serangan terhadap server DHCP dengan permintaan discover berkali-kali menggunakan alamat IP dan MAC, serta transaction ID palsu. <br/>
+#### 1. DHCP 
+DHCP (Dynamic Host Configuration Protocol). DHCP adalah protokol jaringan yang berfungsi untuk mendistribusikan konfigurasi alamat IP (Internet Protocol) secara otomatis kepada perangkat yang terhubung ke jaringan.
 
-Dampaknya, server akan mengira ada banyak klien atau perangkat baru yang mengakses server, lalu server akan mereservasi IP untuk setiap permintaan dari perangkat tersebut sampai pool-nya habis. <br/>
+Proses komunikasi standar DHCP:
+  - Discover: Klien mencari server DHCP.
+  - Offer: Server menawarkan alamat IP.
+  - Request: Klien meminta IP yang ditawarkan.
+  - Acknowledge: Server menyetujui dan memberikan masa sewa (lease) IP tersebut.
 
-Sehingga, ketika perangkat asli ingin mengakses server, mereka akan kehabisan alamat IP dan terjadi denial of service. <br/>
 
-Karena Pool sudah habis dan perangkat asli tidak mendapatkan alamat IP, maka biasanya penyerang akan melakukan DHCP Spoofing. <br/>
+#### 2. DHCP starvation & DHCP exhaustion
+DHCP starvation adalah jenis serangan siber di mana penyerang menghabiskan seluruh ketersediaan alamat IP (IP pool) pada server DHCP dengan cara membanjirinya menggunakan permintaan palsu (DHCP discover) secara massal menggunakan alamat MAC palsu.
+DHCP exhaustion adalah kondisi ketika server DHCP kehabisan kuota alamat IP (IP address pool) yang tersedia untuk dibagikan ke perangkat baru di dalam jaringan
 
-Situasi ketika penyerang menjalankan server DHCP palsu untuk mengelabui para pengguna dengan membagikan konfigurasi yang menyesatkan. <br/>
+Mekanisme:
+- Penyerang menggunakan tool otomatisasi (seperti Yersinia atau DHCPig) untuk mengirimkan packet DHCP DISCOVER secara masif dan terus-menerus.
+- Setiap paket dikirim dengan MAC Address yang dipalsukan (MAC Spoofing) secara acak untuk mengelabui server agar menganggapnya sebagai klien yang berbeda-beda.
+- Server DHCP merespons dengan DHCP OFFER dan mencadangkan IP hingga pool benar-benar habis.
 
-Dampaknya, trafik para pengguna akan melewati DNS atau Gateway milik penyerang terlebih dahulu yang mana ini berpotensi penyadapan, pemblokiran, dan mengarahkan ke halaman phishing. <br/><br/>
 
-#### 4. Filter Wireshark 
+#### 3. Filter Wireshark 
 |Filter|Kegunaan|
 |---|---|
 |'dhcp'|Menampilkan seluruh trafik DHCP|
@@ -37,7 +44,7 @@ Cek jumlah MAC address unik (bukti spoofing)
 Isolasi OFFER<br/>
 <img width="1135" height="1015" alt="image" src="https://github.com/user-attachments/assets/df9581a7-e00a-47a9-bb8f-f2335cfc9abb" /><br/><br/>
 
-#### 5. Temuan
+#### 4. Temuan
 | Indikator | Temuan |
 |---|---|
 | Jenis serangan | DHCP Starvation / DHCP Exhaustion Attack |
@@ -54,14 +61,14 @@ Isolasi OFFER<br/>
 
 <br>
 
-#### 6.Dampak dan Potensi Lanjutan
+#### 5.Dampak dan Potensi Lanjutan
 Pada serangan ini, seluruh 51 alamat IP yang tersedia berhasil digunakan sampai DHCP pool habis. Akibatnya, perangkat asli yang baru terhubung tidak mendapatkan alamat IP dan akhirnya tidak bisa mengakses jaringan atau internet secara normal. <br/>
 
 Serangan ini menyebabkan Denial of Service (DoS) pada layanan DHCP. Setelah pool habis, penyerang juga dapat melanjutkan dengan DHCP Spoofing, yaitu membuat DHCP server palsu untuk memberikan konfigurasi jaringan kepada korban. <br/>
 
 Jika korban menerima konfigurasi dari server palsu, trafik korban dapat diarahkan melalui gateway atau DNS milik penyerang. Hal ini dapat dimanfaatkan untuk penyadapan, pengalihan ke situs phishing, atau manipulasi koneksi. <br/><br/>
 
-#### 7. Analogi Kehidupan Nyata
+#### 6. Analogi Kehidupan Nyata
 DHCP Starvation dapat dianalogikan seperti sebuah hotel yang hanya memiliki 51 kamar. Dalam kondisi normal, setiap tamu yang datang ke resepsionis akan meminta kamar, kemudian resepsionis memberikan satu kamar yang tersedia kepada tamu tersebut. DHCP server berperan sebagai resepsionis, alamat IP sebagai kamar hotel, dan perangkat yang terhubung ke jaringan sebagai tamu. <br/>
 
 Penyerang kemudian membuat ratusan reservasi menggunakan identitas yang berbeda-beda. Meskipun reservasi tersebut berasal dari satu pihak, resepsionis menganggap setiap identitas sebagai tamu yang berbeda dan terus menyediakan kamar sampai seluruh 51 kamar dinyatakan terpakai. Kondisi ini menggambarkan penggunaan banyak MAC address palsu pada DHCP Starvation untuk menghabiskan DHCP pool. <br/>
