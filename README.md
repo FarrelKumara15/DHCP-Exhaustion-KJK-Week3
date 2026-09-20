@@ -51,7 +51,8 @@ Isolasi OFFER<br/>
 | Alamat IP pool terpakai | 51 / 51 (100% habis) |
 | Puncak intensitas serangan | Detik ke-5 (99 DISCOVER/detik) |
 | Client gagal mendapat IP (korban potensial) | 203 |
-<br/><br/>
+
+<br>
 
 #### 6.Dampak dan Potensi Lanjutan
 Pada serangan ini, seluruh 51 alamat IP yang tersedia berhasil digunakan sampai DHCP pool habis. Akibatnya, perangkat asli yang baru terhubung tidak mendapatkan alamat IP dan akhirnya tidak bisa mengakses jaringan atau internet secara normal. <br/>
