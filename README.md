@@ -51,4 +51,34 @@ Isolasi OFFER<br/>
 | Alamat IP pool terpakai | 51 / 51 (100% habis) |
 | Puncak intensitas serangan | Detik ke-5 (99 DISCOVER/detik) |
 | Client gagal mendapat IP (korban potensial) | 203 |
+<br/><br/>
 
+#### 6.Dampak dan Potensi Lanjutan
+Pada serangan ini, seluruh 51 alamat IP yang tersedia berhasil digunakan sampai DHCP pool habis. Akibatnya, perangkat asli yang baru terhubung tidak mendapatkan alamat IP dan akhirnya tidak bisa mengakses jaringan atau internet secara normal. <br/>
+
+Serangan ini menyebabkan Denial of Service (DoS) pada layanan DHCP. Setelah pool habis, penyerang juga dapat melanjutkan dengan DHCP Spoofing, yaitu membuat DHCP server palsu untuk memberikan konfigurasi jaringan kepada korban. <br/>
+
+Jika korban menerima konfigurasi dari server palsu, trafik korban dapat diarahkan melalui gateway atau DNS milik penyerang. Hal ini dapat dimanfaatkan untuk penyadapan, pengalihan ke situs phishing, atau manipulasi koneksi. <br/><br/>
+
+#### 7. Analogi Kehidupan Nyata
+DHCP Starvation dapat dianalogikan seperti sebuah hotel yang hanya memiliki 51 kamar. Dalam kondisi normal, setiap tamu yang datang ke resepsionis akan meminta kamar, kemudian resepsionis memberikan satu kamar yang tersedia kepada tamu tersebut. DHCP server berperan sebagai resepsionis, alamat IP sebagai kamar hotel, dan perangkat yang terhubung ke jaringan sebagai tamu. <br/>
+
+Penyerang kemudian membuat ratusan reservasi menggunakan identitas yang berbeda-beda. Meskipun reservasi tersebut berasal dari satu pihak, resepsionis menganggap setiap identitas sebagai tamu yang berbeda dan terus menyediakan kamar sampai seluruh 51 kamar dinyatakan terpakai. Kondisi ini menggambarkan penggunaan banyak MAC address palsu pada DHCP Starvation untuk menghabiskan DHCP pool. <br/>
+
+Ketika tamu asli datang, resepsionis tidak lagi memiliki kamar yang dapat diberikan. Hal tersebut sama seperti perangkat asli yang mengirim DHCPDISCOVER tetapi tidak dapat memperoleh alamat IP karena seluruh DHCP pool sudah habis. <br/>
+
+Serangan lanjutan DHCP Spoofing dapat dianalogikan ketika penyerang membuka meja resepsionis palsu di depan hotel. Karena resepsionis asli sudah tidak dapat memberikan kamar, tamu dapat menerima tawaran dari resepsionis palsu. Resepsionis palsu kemudian memberikan petunjuk yang mengharuskan tamu melewati jalan atau lokasi yang dikendalikan oleh penyerang. Hal tersebut menggambarkan pemberian default gateway atau DNS palsu sehingga komunikasi perangkat korban dapat diarahkan melalui infrastruktur milik penyerang. <br/><br/>
+
+| Komponen Jaringan | Analogi Hotel |
+|---|---|
+| DHCP Server | Resepsionis hotel |
+| DHCP Pool | Jumlah kamar yang tersedia |
+| IP Address | Nomor kamar |
+| Client asli | Tamu asli |
+| MAC Address | Identitas tamu |
+| MAC Address palsu | Identitas/reservasi palsu |
+| DHCP Starvation | Memborong seluruh kamar menggunakan banyak identitas palsu |
+| DHCP Pool habis | Seluruh kamar dinyatakan penuh |
+| Client gagal mendapat IP | Tamu asli tidak mendapatkan kamar |
+| Rogue DHCP Server | Resepsionis palsu |
+| Gateway/DNS palsu | Petunjuk jalan palsu yang diberikan kepada tamu |
